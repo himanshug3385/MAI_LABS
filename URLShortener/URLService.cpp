@@ -11,7 +11,16 @@ private:
 
     string getUniqueId()
     {
-        return "";
+        string id = "";
+        const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        int charsetSize = sizeof(charset) - 1;
+
+        for (int i = 0; i < 7; ++i)
+        {
+            id += charset[rand() % charsetSize];
+        }
+
+        return id;
     }
     string getUrlDomain(string url)
     {
@@ -53,10 +62,10 @@ public:
         return urlMap[shortUrlId];
     }
     // GET API for getting 3 top Domains - /top-domains
-    vector<pair<string,int>> getTopDomains()
+    vector<pair<string, int>> getTopDomains()
     {
         int count = 0;
-        vector<pair<string,int>> response;
+        vector<pair<string, int>> response;
         priority_queue<pair<int, string>> copyDomainCount = domainCount;
         while (!copyDomainCount.empty() and count < 3)
         {
@@ -65,7 +74,7 @@ public:
             if (occurence == domainCountMap[domain])
                 count++;
             copyDomainCount.pop();
-            response.push_back({domain,occurence});
+            response.push_back({domain, occurence});
         }
         return response;
     }
@@ -74,36 +83,36 @@ public:
 int main()
 {
     URLService urlService;
-    unordered_map<string,string>request;
-    request["url"]="https://youtube.com/abcbdbddd";
+    unordered_map<string, string> request;
+    request["url"] = "https://youtube.com/abcbdbddd";
     pair<string, string> response = urlService.shortenUrl(request);
-    cout<<response.first<<"->"<<response.second<<endl;
-    request["url"]="https://udemy.com/fhldfhhf";
+    cout << response.first << "->" << response.second << endl;
+    request["url"] = "https://udemy.com/fhldfhhf";
     pair<string, string> response2 = urlService.shortenUrl(request);
-    request["url"]="https://udemy.com/fallsaslh";
+    request["url"] = "https://udemy.com/fallsaslh";
     pair<string, string> response3 = urlService.shortenUrl(request);
-    request["url"]="https://udemy.com/fallsaslh";
+    request["url"] = "https://udemy.com/fallsaslh";
     pair<string, string> response4 = urlService.shortenUrl(request);
-    request["url"]="https://udemy.com/qewepoiii";
+    request["url"] = "https://udemy.com/qewepoiii";
     pair<string, string> response5 = urlService.shortenUrl(request);
-    request["url"]="https://wikipedia.com/SSCCasak";
+    request["url"] = "https://wikipedia.com/SSCCasak";
     pair<string, string> response6 = urlService.shortenUrl(request);
-    request["url"]="https://wikipedia.com/nnAADnm";
+    request["url"] = "https://wikipedia.com/nnAADnm";
     pair<string, string> response7 = urlService.shortenUrl(request);
-    request["url"]="https://wikipedia.com/eqopeasas";
+    request["url"] = "https://wikipedia.com/eqopeasas";
     pair<string, string> response8 = urlService.shortenUrl(request);
-    request["url"]="https://wikipedia.com/sksnsSA";
+    request["url"] = "https://wikipedia.com/sksnsSA";
     pair<string, string> response9 = urlService.shortenUrl(request);
-    request["url"]="https://wikipedia.com/ASASFalask";
+    request["url"] = "https://wikipedia.com/ASASFalask";
     pair<string, string> response10 = urlService.shortenUrl(request);
 
-    string shorturlid=urlService.redirectUrl("ASASFalask");
-    cout<<"ASASFalask => long url"<<shorturlid<<endl;
+    string shorturlid = urlService.redirectUrl("ASASFalask");
+    cout << "ASASFalask => long url" << shorturlid << endl;
 
-    vector<pair<string,int>>top3Domains=urlService.getTopDomains();
-    for(auto domain:top3Domains){
-        cout<<domain.first<< " "<<domain.second<<endl;
+    vector<pair<string, int>> top3Domains = urlService.getTopDomains();
+    for (auto domain : top3Domains)
+    {
+        cout << domain.first << " " << domain.second << endl;
     }
     return 0;
-
 }

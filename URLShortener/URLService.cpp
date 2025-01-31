@@ -46,12 +46,12 @@ public:
     {
         string originalUrl = request["url"];
         string shortUrlId = getUniqueId();
-        urlMap[shortUrlId] = originalUrl;
+        urlMap[base_url+"/"+shortUrlId] = originalUrl;
         string domain = getUrlDomain(originalUrl);
         domainCountMap[domain]++;
         domainCount.push({domainCountMap[domain], domain});
         pair<string, string> response;
-        response = make_pair("shortUrl", base_url + shortUrlId);
+        response = make_pair("shortUrl", base_url + "/"+shortUrlId);
         return response;
     }
     // GET API for redirecting to long url - /{shortUrlId}
@@ -64,17 +64,15 @@ public:
     // GET API for getting 3 top Domains - /top-domains
     vector<pair<string, int>> getTopDomains()
     {
-        int count = 0;
         vector<pair<string, int>> response;
         priority_queue<pair<int, string>> copyDomainCount = domainCount;
-        while (!copyDomainCount.empty() and count < 3)
+        while (!copyDomainCount.empty() and response.size() < 3)
         {
             string domain = copyDomainCount.top().second;
             int occurence = copyDomainCount.top().first;
             if (occurence == domainCountMap[domain])
-                count++;
+                response.push_back({domain, occurence});
             copyDomainCount.pop();
-            response.push_back({domain, occurence});
         }
         return response;
     }
@@ -106,8 +104,8 @@ int main()
     request["url"] = "https://wikipedia.com/ASASFalask";
     pair<string, string> response10 = urlService.shortenUrl(request);
 
-    string shorturlid = urlService.redirectUrl("ASASFalask");
-    cout << "ASASFalask => long url" << shorturlid << endl;
+    string longUrl = urlService.redirectUrl(response.second);
+    cout << response.second<<" => long url: " << longUrl << endl;
 
     vector<pair<string, int>> top3Domains = urlService.getTopDomains();
     for (auto domain : top3Domains)
